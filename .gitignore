@@ -1,2 +1,5 @@
 .pio
 .idea
+
+# configuration file
+src/config.h

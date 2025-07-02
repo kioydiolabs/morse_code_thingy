@@ -1,9 +1,10 @@
 #include <Arduino.h>
-#define BUZZERPIN 11
-#define LEDPIN 12
+#include "config.h"
 
-#define FREQUENCY 2100
-#define UNIT 100
+/*
+ * Define your config values in config.h as shown in the example.config.h file.
+ * Copy that file, and rename it to config.h and make any changes.
+*/
 
 const String MorseDictionnary[39][2] ={
     {"A",".-"},
