@@ -1,0 +1,10 @@
+﻿Designator,Footprint,Quantity,Value,LCSC Part #
+BZ1,Buzzer_12x9.5RM7.6,1,Buzzer,
+"C1, C2",C_Disc_D3.0mm_W1.6mm_P2.50mm,2,C,
+C3,C_Radial_D5.0mm_H11.0mm_P2.00mm,1,C_US,
+D1,LED_D5.0mm_Clear,1,LED,
+J1,TerminalBlock_MaiXu_MX126-5.0-02P_1x02_P5.00mm,1,Screw_Terminal_01x02,
+"R1, R2",R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal,2,R,
+U1,DIP-28_W7.62mm_Socket,1,ATmega328-P,
+U2,TO-220-3_Vertical,1,LM7805_TO220,
+Y1,Crystal_HC50_Vertical,1,Crystal,
