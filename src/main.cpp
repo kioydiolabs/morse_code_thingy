@@ -1,5 +1,9 @@
 #include <Arduino.h>
-#include <cstring>
+#define BUZZERPIN 11
+#define LEDPIN 12
+
+#define FREQUENCY 2100
+#define UNIT 100
 
 const String MorseDictionnary[39][2] ={
     {"A",".-"},
@@ -43,59 +47,41 @@ const String MorseDictionnary[39][2] ={
     {";","-.-.-."}
 };
 
-constexpr unsigned int freq = 2100;
-constexpr unsigned int UNIT = 100; // Base Morse time unit in ms (tweak this!)
-
-constexpr unsigned int buzzerpin = 18;
-constexpr unsigned int ledpin = 19;
-
 const String message_to_translate = "example message";
-
-void init_buzzer (int pin) {
-    // Setup the PWM channel
-    ledcSetup(0, 2000, 8);    // Channel 0, 2000 Hz, 8-bit resolution
-    ledcAttachPin(pin, 0); // Attach GPIO pin (passed from arg) to channel 0
-}
 
 void play_morse_string (String morse_string) {
     unsigned int length = morse_string.length();
 
-    for (int i = 0; i < length; i++) {
+    for (unsigned int i = 0; i < length; i++) {
         Serial.print(morse_string[i]);
         if (morse_string[i] == '.') {
-            digitalWrite(ledpin, HIGH);
-            ledcWriteTone(0, freq); // 1.5 kHz tone
+            digitalWrite(LEDPIN, HIGH);
+            tone(BUZZERPIN, FREQUENCY);
             delay(UNIT); // Dot = 1 unit
         } else if (morse_string[i] == '-') {
-            digitalWrite(ledpin, HIGH);
-            ledcWriteTone(0, freq); // 1.5 kHz tone
+            digitalWrite(LEDPIN, HIGH);
+            tone(BUZZERPIN, FREQUENCY);
             delay(3 * UNIT); // Dash = 3 units
         }
-        digitalWrite(ledpin, LOW);
-        ledcWriteTone(0, 0); // 1.5 kHz tone
+        digitalWrite(LEDPIN, LOW);
+        noTone(BUZZERPIN);
         delay(UNIT);
     }
     Serial.println("");
 }
 
 void decode_message (String message) {
-
-    // Serial.print("Will now play: \"");
-    // Serial.print(message);
-    // Serial.println("\"");
-
-    String morseStringToBlink;
     unsigned int length = message.length();
 
-    for (int x = 0; x < length; x++) {
+    for (unsigned int x = 0; x < length; x++) {
         if (message[x] == ' ') {
             Serial.println("*** NEXT WORD ***");
             delay(7 * UNIT); // Word gap
         }
-        for(int i = 0 ; i < 39 ; i++)
+        for(const auto & i : MorseDictionnary)
         {
-            if(toUpperCase(message[x]) == MorseDictionnary[i][0][0]){
-                morseStringToBlink = MorseDictionnary[i][1];
+            if(toUpperCase(message[x]) == i[0][0]){
+                String morseStringToBlink = i[1];
                 Serial.print(message[x]);
                 Serial.print("   ");
                 play_morse_string(morseStringToBlink);
@@ -110,18 +96,18 @@ void setup() {
 
     Serial.begin(115200);
     Serial.print("Booting");
-    init_buzzer(buzzerpin);
-    pinMode(ledpin, OUTPUT);
+    pinMode(BUZZERPIN, OUTPUT);
+    pinMode(LEDPIN, OUTPUT);
 
-    ledcWriteTone(0, 250); // 1.5 kHz tone
-    digitalWrite(ledpin, HIGH);
+    tone(BUZZERPIN, 250);
+    digitalWrite(LEDPIN, HIGH);
     delay(150); // Play for 150ms
-    ledcWriteTone(0, 450); // 1.5 kHz tone
+    tone(BUZZERPIN, 450);
     delay(150); // Play for 150ms
-    ledcWriteTone(0, 650); // 1.5 kHz tone
+    tone(BUZZERPIN, 650);
     delay(500);
-    ledcWriteTone(0, 0); // 1.5 kHz tone
-    digitalWrite(ledpin, LOW);
+    noTone(BUZZERPIN);
+    digitalWrite(LEDPIN, LOW);
 
     delay(500);
 
@@ -132,7 +118,6 @@ void setup() {
 void loop() {
 
     decode_message(message_to_translate);
-    // Serial.println("Stand by...\n\n");
     Serial.println("\n\n");
     delay(2500);
 
