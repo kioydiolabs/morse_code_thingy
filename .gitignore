@@ -3,3 +3,7 @@
 
 # configuration file
 src/config.h
+
+# kicad
+pcb/project/project-backups/
+pcb/project/*.lck
